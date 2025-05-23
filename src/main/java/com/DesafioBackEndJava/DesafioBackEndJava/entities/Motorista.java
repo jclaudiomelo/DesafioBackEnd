@@ -1,21 +1,24 @@
 package com.DesafioBackEndJava.DesafioBackEndJava.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Motorista {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, length = 100)
 	private String nome;
 
 	@OneToMany(mappedBy = "motorista")
 	private List<Entrega> entregas;
+
 }
