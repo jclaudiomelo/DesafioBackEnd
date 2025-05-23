@@ -18,6 +18,9 @@ public class Motorista {
 	@Column(nullable = false, length = 100)
 	private String nome;
 
+	@Column(nullable = false, unique = true, length = 11)
+	private String cpf;
+
 	@OneToMany(mappedBy = "motorista")
 	private List<Entrega> entregas;
 

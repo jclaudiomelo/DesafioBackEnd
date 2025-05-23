@@ -20,12 +20,16 @@ public class CaminhaoService {
 	@Transactional
 	public CaminhaoDTO criar(CaminhaoDTO caminhaoDTO) {
 		Caminhao caminhao = new Caminhao();
-		caminhao.setPlaca(caminhaoDTO.getPlaca());
-		caminhao.setModelo(caminhaoDTO.getModelo());
-		caminhao.setAno(caminhaoDTO.getAno());
+		caminhao.setPlaca(caminhaoDTO.placa());
+		caminhao.setModelo(caminhaoDTO.modelo());
+		caminhao.setAno(caminhaoDTO.ano());
+
+		if (caminhaoRepository.findByPlaca(caminhaoDTO.placa()).isPresent()) {
+			throw new RuntimeException("Já existe um caminhão cadastrado com essa placa.");
+		}
 
 		Caminhao salvo = caminhaoRepository.save(caminhao);
-		return toDTO(salvo);
+		return caminhaoDTO(salvo);
 	}
 
 	// Listar todos
@@ -33,7 +37,7 @@ public class CaminhaoService {
 	public List<CaminhaoDTO> listarTodos() {
 		return caminhaoRepository.findAll()
 				.stream()
-				.map(this::toDTO)
+				.map(this::caminhaoDTO)
 				.collect(Collectors.toList());
 	}
 
@@ -42,20 +46,19 @@ public class CaminhaoService {
 	public CaminhaoDTO buscarPorId(Long id) {
 		Caminhao caminhao = caminhaoRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Caminhão não encontrado"));
-		return toDTO(caminhao);
+		return caminhaoDTO(caminhao);
 	}
 
 	// Atualizar
 	@Transactional
-	public CaminhaoDTO atualizar(Long id, CaminhaoDTO dto) {
+	public CaminhaoDTO atualizar(Long id, CaminhaoDTO caminhaoDTO) {
 		Caminhao caminhao = caminhaoRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Caminhão não encontrado"));
+		caminhao.setPlaca(caminhaoDTO.placa());
+		caminhao.setModelo(caminhaoDTO.modelo());
+		caminhao.setAno(caminhaoDTO.ano());
 
-		caminhao.setPlaca(dto.getPlaca());
-		caminhao.setModelo(dto.getModelo());
-		caminhao.setAno(dto.getAno());
-
-		return toDTO(caminhaoRepository.save(caminhao));
+		return caminhaoDTO(caminhaoRepository.save(caminhao));
 	}
 
 	// Deletar
@@ -68,12 +71,13 @@ public class CaminhaoService {
 
 	// Conversão para DTO
 	@Transactional
-	private CaminhaoDTO toDTO(Caminhao caminhao) {
-		CaminhaoDTO dto = new CaminhaoDTO();
-		dto.setId(caminhao.getId());
-		dto.setPlaca(caminhao.getPlaca());
-		dto.setModelo(caminhao.getModelo());
-		dto.setAno(caminhao.getAno());
-		return dto;
+	private CaminhaoDTO caminhaoDTO(Caminhao caminhao) {
+		CaminhaoDTO caminhaoDTO = new CaminhaoDTO(
+				caminhao.getId(),
+				caminhao.getPlaca(),
+				caminhao.getModelo(),
+				caminhao.getAno());
+
+		return caminhaoDTO;
 	}
 }
