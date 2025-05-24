@@ -2,18 +2,23 @@ package com.DesafioBackEndJava.DesafioBackEndJava.entities;
 
 import com.DesafioBackEndJava.DesafioBackEndJava.enums.TipoCarga;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @Entity
 public class Entrega {
 
-
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private Double valor;
 	private String destino;
-	private String horario;
+	private LocalDateTime horario;
 
 	@Enumerated(EnumType.STRING)
 	private TipoCarga tipoCarga;
