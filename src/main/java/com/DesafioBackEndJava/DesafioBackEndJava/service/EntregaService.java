@@ -32,6 +32,8 @@ public class EntregaService {
 	@Autowired
 	private MotoristaRepository motoristaRepository;
 
+
+	//CRIAR ENTREGAS
 	@Transactional
 	public EntregaDTO criarEntrega(EntregaDTO caminhaoDTO) {
 		Caminhao caminhao = caminhaoRepository.findById(caminhaoDTO.caminhaoId())
@@ -107,6 +109,51 @@ public class EntregaService {
 				entrega.getMotorista().getId());
 	}
 
+	@Transactional
+	public EntregaDTO atualizarEntrega(Long id, EntregaDTO entregaDTO) {
+		Entrega entrega = entregaRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Entrega não encontrada com ID: " + id));
+
+		entrega.setValor(entregaDTO.valor());
+		entrega.setDestino(entregaDTO.destino());
+		entrega.setHorario(entregaDTO.horario());
+//		entrega.setTipoCarga(entregaDTO.tipoCarga());
+//		entrega.setValiosa(entregaDTO.valiosa());
+//		entrega.setPerigosa(entregaDTO.perigosa());
+//		entrega.setTemSeguro(entregaDTO.temSeguro());
+
+		// Atualiza caminhão (verifica se existe)
+		if (entregaDTO.caminhaoId() != null) {
+			Caminhao caminhao = caminhaoRepository.findById(entregaDTO.caminhaoId())
+					.orElseThrow(() -> new RuntimeException("Caminhão não encontrado com ID: " + entregaDTO.caminhaoId()));
+			entrega.setCaminhao(caminhao);
+		}
+
+		// Atualiza motorista (verifica se existe)
+		if (entregaDTO.motoristaId() != null) {
+			Motorista motorista = motoristaRepository.findById(entregaDTO.motoristaId())
+					.orElseThrow(() -> new RuntimeException("Motorista não encontrado com ID: " + entregaDTO.motoristaId()));
+			entrega.setMotorista(motorista);
+		}
+
+		Entrega entregaAtualizada = entregaRepository.save(entrega);
+
+		return new EntregaDTO(
+				entregaAtualizada.getId(),
+				entregaAtualizada.getValor(),
+				entregaAtualizada.getDestino(),
+				entregaAtualizada.getHorario(),
+				entregaAtualizada.getTipoCarga(),
+				entregaAtualizada.isValiosa(),
+				entregaAtualizada.isPerigosa(),
+				entregaAtualizada.isTemSeguro(),
+				entregaAtualizada.getCaminhao() != null ? entregaAtualizada.getCaminhao().getId() : null,
+				entregaAtualizada.getMotorista() != null ? entregaAtualizada.getMotorista().getId() : null
+		);
+	}
+
+
+	//LISTAR ENTREGAS
 	@Transactional(readOnly = true)
 	public List<EntregaDTO> listarEntregas() {
 		List<Entrega> entregas = entregaRepository.findAll();

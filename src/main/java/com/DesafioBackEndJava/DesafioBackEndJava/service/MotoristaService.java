@@ -3,7 +3,6 @@ package com.DesafioBackEndJava.DesafioBackEndJava.service;
 import com.DesafioBackEndJava.DesafioBackEndJava.dto.MotoristaDTO;
 import com.DesafioBackEndJava.DesafioBackEndJava.entities.Motorista;
 import com.DesafioBackEndJava.DesafioBackEndJava.exceptions.CustomException;
-import com.DesafioBackEndJava.DesafioBackEndJava.exceptions.GlobalExceptions;
 import com.DesafioBackEndJava.DesafioBackEndJava.repository.MotoristaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +24,12 @@ public class MotoristaService {
 		Motorista motorista = new Motorista();
 		motorista.setNome(motoristaDTO.nome());
 		motorista.setCpf(motoristaDTO.cpf());
-
 		if (motoristaRepository.findByCpf(motoristaDTO.cpf()).isPresent()) {
-			throw new CustomException("Já existe um motorista cadastrado com essa CPF.", HttpStatus.NO_CONTENT.value());
+			throw new CustomException("Já existe um motorista cadastrado com essa CPF.", HttpStatus.CONFLICT.value());
 		}
-
+		if (motoristaDTO.cpf().length() != 11) {
+			throw new CustomException("CPF não contem 11 numeros.", HttpStatus.CONFLICT.value());
+		}
 		Motorista salvo = motoristaRepository.save(motorista);
 		return new MotoristaDTO(
 				salvo.getId(),
@@ -51,7 +51,7 @@ public class MotoristaService {
 	@Transactional
 	public MotoristaDTO buscarPorId(Long id) {
 		Motorista motorista = motoristaRepository.findById(id)
-				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
+				.orElseThrow(() -> new CustomException("Motorista não encontrado", HttpStatus.NOT_FOUND.value()));
 		return motoristaDTO(motorista);
 	}
 
@@ -59,7 +59,7 @@ public class MotoristaService {
 	@Transactional
 	public MotoristaDTO atualizar(Long id, MotoristaDTO motoristaDTO) {
 		Motorista motorista = motoristaRepository.findById(id)
-				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
+				.orElseThrow(() -> new CustomException("Motorista não encontrado", HttpStatus.NOT_FOUND.value()));
 		motorista.setCpf(motoristaDTO.cpf());
 		motorista.setNome(motorista.getNome());
 
@@ -70,7 +70,7 @@ public class MotoristaService {
 	@Transactional
 	public void deletar(Long id) {
 		Motorista motorista = motoristaRepository.findById(id)
-				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
+				.orElseThrow(() -> new CustomException("Motorista não encontrado", HttpStatus.NOT_FOUND.value()));
 		motoristaRepository.delete(motorista);
 	}
 

@@ -16,8 +16,8 @@ public class CaminhaoController {
 	private CaminhaoService caminhaoService;
 
 	@PostMapping("/criar")
-	public ResponseEntity<CaminhaoDTO> criar(@RequestBody CaminhaoDTO dto) {
-		CaminhaoDTO novo = caminhaoService.criar(dto);
+	public ResponseEntity<CaminhaoDTO> criar(@RequestBody CaminhaoDTO caminhaoDTO) {
+		CaminhaoDTO novo = caminhaoService.criar(caminhaoDTO);
 		return ResponseEntity.ok(novo);
 	}
 
@@ -32,8 +32,8 @@ public class CaminhaoController {
 	}
 
 	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<CaminhaoDTO> atualizar(@PathVariable Long id, @RequestBody CaminhaoDTO dto) {
-		return ResponseEntity.ok(caminhaoService.atualizar(id, dto));
+	public ResponseEntity<CaminhaoDTO> atualizar(@PathVariable Long id, @RequestBody CaminhaoDTO caminhaoDTO) {
+		return ResponseEntity.ok(caminhaoService.atualizar(id, caminhaoDTO));
 	}
 
 	@DeleteMapping("/deletar/{id}")

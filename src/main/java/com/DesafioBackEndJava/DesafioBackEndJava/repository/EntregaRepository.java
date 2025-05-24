@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EntregaRepository extends JpaRepository<Entrega, Long> {
+
 	List<Entrega> findByCaminhaoIdAndHorarioBetween(Long caminhaoId, LocalDateTime inicio, LocalDateTime fim);
 
 	List<Entrega> findByMotoristaIdAndHorarioBetween(Long motoristaId, LocalDateTime inicio, LocalDateTime fim);

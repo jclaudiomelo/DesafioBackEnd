@@ -15,12 +15,18 @@ public class EntregaController {
 	private EntregaService entregaService;
 
 	@PostMapping("/criar")
-	public ResponseEntity<EntregaDTO>criar(@RequestBody EntregaDTO entregaDTO){
+	public ResponseEntity<EntregaDTO> criar(@RequestBody EntregaDTO entregaDTO) {
 		return ResponseEntity.ok(entregaService.criarEntrega(entregaDTO));
 	}
 
 	@GetMapping("/listar")
-	public ResponseEntity<List<EntregaDTO>>listar(){
+	public ResponseEntity<List<EntregaDTO>> listar() {
 		return ResponseEntity.ok(entregaService.listarEntregas());
+	}
+
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<EntregaDTO> atualizar(
+			@RequestBody EntregaDTO entregaDTO, @PathVariable Long id) {
+		return ResponseEntity.ok(entregaService.atualizarEntrega(id, entregaDTO));
 	}
 }

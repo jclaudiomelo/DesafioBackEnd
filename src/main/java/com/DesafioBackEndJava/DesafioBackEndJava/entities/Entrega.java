@@ -28,6 +28,7 @@ public class Entrega {
 	private boolean temSeguro;
 
 	@OneToOne
+	@JoinColumn(name = "caminhao_id")
 	private Caminhao caminhao;
 
 	@ManyToOne
