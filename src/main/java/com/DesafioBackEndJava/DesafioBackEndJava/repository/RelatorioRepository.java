@@ -31,11 +31,14 @@ public interface RelatorioRepository extends JpaRepository<Entrega, Long> {
 	);
 
 	@Query(value = """
-			    SELECT DATE(horario) as data, SUM(valor) as valorTotal
-			    FROM entrega
-			    WHERE horario BETWEEN :inicio AND :fim
-			    GROUP BY DATE(horario)
-			    ORDER BY DATE(horario)
+			SELECT 
+			    DATE(horario) as data,
+			    tipo_carga as tipoCarga,
+			    SUM(valor) as valorTotal
+			FROM entrega
+			WHERE horario BETWEEN :inicio AND :fim
+			GROUP BY DATE(horario), tipo_carga
+			ORDER BY DATE(horario), tipo_carga
 			""", nativeQuery = true)
 	List<TotalPorDiaDTO> findTotaisPorDia(
 			@Param("inicio") LocalDateTime inicio,

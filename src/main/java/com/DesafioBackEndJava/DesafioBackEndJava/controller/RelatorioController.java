@@ -1,15 +1,12 @@
 package com.DesafioBackEndJava.DesafioBackEndJava.controller;
 
 import com.DesafioBackEndJava.DesafioBackEndJava.dto.RelatorioEntregaDTO;
+import com.DesafioBackEndJava.DesafioBackEndJava.dto.RelatorioEntregaPorFiltroDTO;
 import com.DesafioBackEndJava.DesafioBackEndJava.dto.TotalPorDiaDTO;
 import com.DesafioBackEndJava.DesafioBackEndJava.service.RelatorioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,5 +40,17 @@ public class RelatorioController {
 			@RequestParam LocalDate fim) {
 
 		return ResponseEntity.ok(relatorioService.calcularTotaisPorDia(inicio, fim));
+	}
+
+	@GetMapping("/relatoriocaminhao/{id}")
+	public ResponseEntity<List<RelatorioEntregaPorFiltroDTO>> relatorioPorCaminhao(
+			@PathVariable Long id) {
+		return ResponseEntity.ok(relatorioService.relatorioPorCaminhao(id));
+	}
+
+	@GetMapping("/relatoriomotorista/{id}")
+	public ResponseEntity<List<RelatorioEntregaPorFiltroDTO>> relatorioPorMotorista(
+			@PathVariable Long id) {
+		return ResponseEntity.ok(relatorioService.relatorioPorMotorista(id));
 	}
 }

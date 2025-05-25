@@ -15,7 +15,12 @@ public interface EntregaRepository extends JpaRepository<Entrega, Long> {
 
 	Optional<Entrega> findFirstByCaminhaoId(Long caminhaoId);
 
+
+	List<Entrega> findByCaminhaoId(Long caminhaoId);
+
+	List<Entrega> findByMotoristaId(Long motoristaId);
+
 	long countByMotoristaIdAndDestino(Long motoristaId, String destino);
 
-	boolean findByCaminhaoId(Long caminhaoId);
+//	boolean findByCaminhaoId(Long caminhaoId);
 }
