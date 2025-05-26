@@ -111,7 +111,7 @@ public class EntregaService {
 	@Transactional
 	public EntregaDTO atualizarEntrega(Long id, EntregaDTO entregaDTO) {
 		Entrega entrega = entregaRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Entrega não encontrada com ID: " + id));
+				.orElseThrow(() -> new CustomException("Entrega não encontrada com ID: " + id, HttpStatus.NOT_MODIFIED.value()));
 
 		entrega.setValor(entregaDTO.valor());
 		entrega.setDestino(entregaDTO.destino());
@@ -124,14 +124,14 @@ public class EntregaService {
 		// Atualiza caminhão (verifica se existe)
 		if (entregaDTO.caminhaoId() != null) {
 			Caminhao caminhao = caminhaoRepository.findById(entregaDTO.caminhaoId())
-					.orElseThrow(() -> new RuntimeException("Caminhão não encontrado com ID: " + entregaDTO.caminhaoId()));
+					.orElseThrow(() -> new CustomException("Caminhão não encontrado com ID: " + entregaDTO.caminhaoId(), HttpStatus.NOT_MODIFIED.value()));
 			entrega.setCaminhao(caminhao);
 		}
 
 		// Atualiza motorista (verifica se existe)
 		if (entregaDTO.motoristaId() != null) {
 			Motorista motorista = motoristaRepository.findById(entregaDTO.motoristaId())
-					.orElseThrow(() -> new RuntimeException("Motorista não encontrado com ID: " + entregaDTO.motoristaId()));
+					.orElseThrow(() -> new CustomException("Motorista não encontrado com ID: " + entregaDTO.motoristaId(), HttpStatus.NOT_FOUND.value()));
 			entrega.setMotorista(motorista);
 		}
 
@@ -151,6 +151,30 @@ public class EntregaService {
 		);
 	}
 
+	// Buscar por ID
+	@Transactional
+	public EntregaDTO buscarPorId(Long id) {
+		Entrega entrega = entregaRepository.findById(id)
+				.orElseThrow(() -> new CustomException("Entrega não encontrado", HttpStatus.NOT_FOUND.value()));
+		return new EntregaDTO(entrega.getId(),
+				entrega.getValor(),
+				entrega.getDestino(),
+				entrega.getHorario(),
+				entrega.getTipoCarga(),
+				entrega.isValiosa(),
+				entrega.isPerigosa(),
+				entrega.isTemSeguro(),
+				entrega.getCaminhao().getId(),
+				entrega.getMotorista().getId());
+	}
+
+	// Deletar
+	@Transactional
+	public void deletar(Long id) {
+		Entrega entrega = entregaRepository.findById(id)
+				.orElseThrow(() -> new CustomException("Entrega não encontrado", HttpStatus.NOT_FOUND.value()));
+		entregaRepository.delete(entrega);
+	}
 
 	//LISTAR ENTREGAS
 	@Transactional(readOnly = true)

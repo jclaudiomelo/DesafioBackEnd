@@ -2,8 +2,10 @@ package com.DesafioBackEndJava.DesafioBackEndJava.service;
 
 import com.DesafioBackEndJava.DesafioBackEndJava.dto.CaminhaoDTO;
 import com.DesafioBackEndJava.DesafioBackEndJava.entities.Caminhao;
+import com.DesafioBackEndJava.DesafioBackEndJava.exceptions.CustomException;
 import com.DesafioBackEndJava.DesafioBackEndJava.repository.CaminhaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,7 @@ public class CaminhaoService {
 	@Transactional
 	public CaminhaoDTO buscarPorId(Long id) {
 		Caminhao caminhao = caminhaoRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Caminhão não encontrado"));
+				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
 		return caminhaoDTO(caminhao);
 	}
 
@@ -53,7 +55,7 @@ public class CaminhaoService {
 	@Transactional
 	public CaminhaoDTO atualizar(Long id, CaminhaoDTO caminhaoDTO) {
 		Caminhao caminhao = caminhaoRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Caminhão não encontrado"));
+				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
 		caminhao.setPlaca(caminhaoDTO.placa());
 		caminhao.setModelo(caminhaoDTO.modelo());
 		caminhao.setAno(caminhaoDTO.ano());
@@ -65,7 +67,7 @@ public class CaminhaoService {
 	@Transactional
 	public void deletar(Long id) {
 		Caminhao caminhao = caminhaoRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Caminhão não encontrado"));
+				.orElseThrow(() -> new CustomException("Caminhão não encontrado", HttpStatus.NOT_FOUND.value()));
 		caminhaoRepository.delete(caminhao);
 	}
 

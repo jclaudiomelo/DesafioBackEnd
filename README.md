@@ -58,7 +58,7 @@ totalizações por dia.
 - Lombok
 - JPA Specifications (consulta dinâmica)
 - Postman
-- Swagger (Springdoc OpenAPI)  http://localhost:8080/swagger-ui/index.html
+- Swagger (Springdoc OpenAPI) 
 
 ## 🚧 Funcionalidades Implementadas
 
@@ -85,3 +85,12 @@ totalizações por dia.
 - ✅ Uso de **Enums** para tipo de carga e região (mais escalável)
 
 ---
+
+## conexão com o banco
+- //localhost:5432/transportadora
+
+- username=postgres
+
+- password=postgres
+
+
