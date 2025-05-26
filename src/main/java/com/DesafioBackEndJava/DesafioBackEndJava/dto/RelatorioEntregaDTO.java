@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record RelatorioEntregaDTO(
 		Long caminhaoId,
+		String motorista,
 		String placa,
 		LocalDateTime horarioEntrega,
 		TipoCarga tipoCarga,

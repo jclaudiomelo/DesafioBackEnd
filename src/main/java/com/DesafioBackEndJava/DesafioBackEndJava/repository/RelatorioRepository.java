@@ -17,6 +17,7 @@ public interface RelatorioRepository extends JpaRepository<Entrega, Long> {
 	@Query("""
 			    SELECT new com.DesafioBackEndJava.DesafioBackEndJava.dto.RelatorioEntregaDTO(
 			        e.caminhao.id,
+			        e.motorista.nome,
 			        e.caminhao.placa,
 			        e.horario,
 			        e.tipoCarga,

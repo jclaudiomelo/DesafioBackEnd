@@ -40,6 +40,7 @@ Este projeto é um sistema backend desenvolvido em **Java com Spring Boot**, que
 -  Lombok
 - JPA Specifications (consulta dinâmica)
 - Postman
+- Swagger - http://localhost:8080/swagger-ui/index.html
 
 ---
 

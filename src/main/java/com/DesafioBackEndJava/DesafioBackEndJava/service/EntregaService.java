@@ -47,7 +47,6 @@ public class EntregaService {
 			throw new CustomException("Caminhão já está em uma entrega ", HttpStatus.CONFLICT.value());
 		}
 
-
 		// Regras 5 e 6: Limite mensal de entregas
 		YearMonth agora = YearMonth.now();
 		LocalDateTime inicioMes = agora.atDay(1).atStartOfDay();
